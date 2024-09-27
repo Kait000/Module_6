@@ -6,7 +6,7 @@ class Figure:
 
     def __init__(self, rgb, *sides):
         self.__sides = []  # список сторон int
-        self.__color = []  # список цветов RGB
+        self.__color = [0, 0, 0]  # список цветов RGB
         filled = False  # заливка
         self.set_color(*rgb)
 
@@ -20,7 +20,8 @@ class Figure:
                 self.__sides.append(self.__sides_len)
 
     def __is_valid_color(self, r, g, b):
-        if (0 <= r <= 255) and (0 <= g <= 255) and (0 <= b <= 255):
+        if ((isinstance(r, int)) and (isinstance(g, int)) and (isinstance(b, int)) and
+                (0 <= r <= 255) and (0 <= g <= 255) and (0 <= b <= 255)):
             return True
         else:
             print(f'Цвет R={r} G={g} B={b} не соответствует формату RGB')
@@ -28,7 +29,7 @@ class Figure:
 
     def __is_valid_sides(self, *new_sides):
         for i in range(len(new_sides)):
-            if new_sides[i] <= 0:
+            if not (isinstance(new_sides[i], int)) or new_sides[i] <= 0:
                 print('Длина сторон не может быть меньше нуля')
                 return False
         if self.sides_count != len(new_sides):  # если кол-во сторон != кол-ву сторон фигуры
@@ -48,6 +49,9 @@ class Figure:
 
     def get_sides(self):
         return self.__sides
+
+    def __len__(self):
+        return sum(self.__sides)
 
 
 class Circle(Figure):
@@ -86,7 +90,7 @@ class Cube(Figure):
         super().__init__(rgb, *sides)
 
     def get_volume(self):
-        return 6 * self.get_sides()[0]**2
+        return self.get_sides()[0]**3
 
 
 print('\n===работа с окружностью===\n')
@@ -148,4 +152,4 @@ print('Новая длина ребра куба:', cube1.get_sides())
 cube1.set_color(128, 138, 148)  # установить новый RGB куба
 print('Новый цвет куба:', cube1.get_color())
 print()
-print('Площадь куба:', cube1.get_volume())
+print('Объем куба:', cube1.get_volume())
